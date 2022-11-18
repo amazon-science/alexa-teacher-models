@@ -10,7 +10,7 @@ AlexaTM 20B can be used for in-context learning. "In-context learning," also kno
 
 To learn more about the model, please read the [Amazon Science blog post](https://www.amazon.science/blog/20b-parameter-alexa-model-sets-new-marks-in-few-shot-learning) and the [paper](https://arxiv.org/abs/2208.01448).
 
-The model is currently available for noncommercial use via SageMaker JumpStart. The model can be accessed using the following steps:
+The model is currently available for noncommercial use via SageMaker JumpStart, as described in our [AWS blog post](https://aws.amazon.com/blogs/machine-learning/alexatm-20b-is-now-available-in-amazon-sagemaker-jumpstart/). The model can be accessed using the following steps:
 
 1. [Create](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/) an AWS account if needed.
 1. In your AWS account, search for `SageMaker` in the search bar and click on it.
