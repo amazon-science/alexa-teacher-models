@@ -1,6 +1,6 @@
-# Alexa Teacher Models
+# Alexa Teacher Model
 
-This repo includes artifacts related to the Alexa Teacher Model initiative. Please check back for updates!
+This is the official Alexa Teacher Model program github page.
 
 ## AlexaTM 20B
 
@@ -24,10 +24,115 @@ The model is currently available for noncommercial use via SageMaker JumpStart, 
 
 Note: You can also find our example notebook [here](https://github.com/aws/amazon-sagemaker-examples/blob/main/introduction_to_amazon_algorithms/jumpstart_alexatm20b/Amazon_Jumpstart_AlexaTM_20B.ipynb)
 
+### Load the Model and Run Inference
+
+```python
+from alexa_teacher_models import AlexaTMTokenizerFast
+tokenizer = AlexaTMTokenizerFast.from_pretrained('/path/to/AlexaTM-20B-pr/')
+
+
+# Load the model
+from alexa_teacher_models import AlexaTMSeq2SeqForConditionalGeneration
+model = AlexaTMSeq2SeqForConditionalGeneration.from_pretrained('/path/to/AlexaTM-20B-pr/')
+```
+
+You can also use the `AutoTokenizer` and `AutoModelForSeq2SeqLM` as you would in any other HuggingFace Transformer
+program by importing `alexa_teacher_models`:
+
+```python
+import alexa_teacher_models
+...
+tokenizer = AutoTokenizer.from_pretrained('/path/to/AlexaTM-20B-pr/')
+model = AutoModelForSeq2SeqLM.from_pretrained('/path/to/AlexaTM-20B-pr/')
+
+```
+
+Load the model on 4 gpus:
+
+```python
+model.bfloat16()
+model.parallelize(4)
+```
+
+Run the model in CLM mode:
+```python
+# qa
+test = """[CLM] Question: Who is the vocalist of coldplay? Answer:"""
+print('Input:', test)
+encoded = tokenizer(test, return_tensors="pt").to('cuda:0')
+generated_tokens = model.generate(input_ids=encoded['input_ids'],
+                                  max_length=32,
+                                  num_beams=1,
+                                  num_return_sequences=1,
+                                  early_stopping=True)
+tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
+```
+
+Run the model in denoising mode:
+```python
+# denoising
+test = "we went to which is the capital of France"
+print('Input:', test)
+encoded = tokenizer(test, return_tensors="pt").to('cuda:0')
+generated_tokens = model.generate(input_ids=encoded['input_ids'],
+                                  max_length=32,
+                                  num_beams=5,
+                                  num_return_sequences=5,
+                                  early_stopping=True)
+tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+```
+
+## Running the repl example
+
+A sample Read Execute Print Loop (REPL) program is provided in the samples.  It can be used to interact with
+any AlexaTM model, and has a flexible set of command line arguments, including support for sampling and using multiple turns of history as context
+
+```
+$ pip install alexa_teacher_models[repl]
+$ python repl.py --model /path/to/AlexaTM-20B-pr/ --max_length 64
+$ python repl.py --model /path/to/AlexaTM-20B-pr/ --max_length 64 --do_sample --max_history 3 --join_string " </s> "
+
+
+```
+
+## Fine-tuning with DeepSpeed on a single P4
+
+*Note* We strongly recommend training on multiple instances.  For information on how to do this, see the section below
+
+To run on a single P4 (8 GPUs), you will need to use CPU offload.  A deepspeed config is provided in the `scripts/deepspeed` directory.
+Assuming you have a training and validation JSONL formatted file, a run would look like this:
+```
+$ pip install alexa_teacher_models[ft]
+$ deepspeed --num_gpus 8 finetune.py --per_device_train_batch_size $BS \
+    --deepspeed deepspeed/zero3-offload.json \
+    --model_name_or_path /home/ubuntu/AlexaTM/ --max_length 512 --bf16 --output_dir output \
+    --max_target_length 64 --do_train --learning_rate 1e-7 \
+    --train_file train.json --validation_file valid.json \
+    --num_train_epochs 1 --save_steps 1000
+
+
+```
+
+## Fine-tuning with DeepSpeed on multiple machines
+
+There is a [detailed tutorial](docs/EFA.md) demonstrating how to fine-tune 20B across multiple machines in EC2 using [Elastic Fabric Adapter (EFA)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html).
+
+## Citation
+If you use AlexaTM 20B, please use the following BibTeX entry.
+
+```
+@article{soltan2022alexatm,
+  title={AlexaTM 20B: Few-Shot Learning Using a Large-Scale Multilingual Seq2seq Model},
+  author={Saleh Soltan, Shankar Ananthakrishnan, Jack FitzGerald, Rahul Gupta, Wael Hamza, Haidar Khan, Charith Peris, Stephen Rawls, Andy Rosenbaum, Anna Rumshisky, Chandana Satya Prakash, Mukund Sridhar, Fabian Triefenbach, Apurv Verma, Gokhan Tur, Prem Natarajan},
+  year={2022}
+}
+```
+
+
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
 ## License
-
-This project (the code) is licensed under the Apache-2.0 License. The AlexaTM 20B model weights are licensed under the [Alexa Teacher Model License Agreement](MODEL_LICENSE.md).
+The code in this package is subject to [License](LICENSE). However, 
+the model weights are subject to [Model License](MODEL_LICENSE.md).
