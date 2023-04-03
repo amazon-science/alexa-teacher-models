@@ -21,7 +21,7 @@ import os
 import logging
 from pprint import pprint
 from prompt_toolkit import PromptSession
-from train_utils import create_tokenizer
+from alexa_teacher_models.scripts.train_utils import create_tokenizer
 
 DEFAULT_PRE = '[CLM] '
 # TODO: make configurable level

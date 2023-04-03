@@ -16,7 +16,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Optional
 from datasets import DatasetDict
-from train_utils import load_data, create_tokenizer, Preprocessor
+from alexa_teacher_models.scripts.train_utils import load_data, create_tokenizer, Preprocessor
 
 # This allows us to us Auto* from HuggingFace to get to the model
 import alexa_teacher_models

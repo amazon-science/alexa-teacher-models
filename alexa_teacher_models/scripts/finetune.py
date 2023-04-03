@@ -20,7 +20,7 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional
 import numpy as np
-from train_utils import load_data, create_tokenizer, Preprocessor, setup_logging
+from alexa_teacher_models.scripts.train_utils import load_data, create_tokenizer, Preprocessor, setup_logging
 from metrics import get_metric
 
 # This allows us to us Auto* from HuggingFace to get to the model
