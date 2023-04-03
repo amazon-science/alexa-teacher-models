@@ -1,4 +1,4 @@
-# Alexa Teacher Model
+# Alexa Teacher Models
 
 This is the official Alexa Teacher Model program github page.
 

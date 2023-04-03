@@ -1,0 +1,29 @@
+name: Publish to PyPI
+
+on:
+    push:
+        tags:
+        - '*'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v1
+        - name: Setup Python
+          uses: actions/setup-python@v1
+          with:
+              python-version: 3.8
+        - name: Install dependencies
+          run: python -m pip install --upgrade pip setuptools wheel
+        - name: Build Package
+          run: |
+              python setup.py sdist bdist_wheel
+              cd ..
+        - name: Publish AlexaTM Package
+          if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+          uses: pypa/gh-action-pypi-publish@release/v1
+          with:
+              password: ${{ secrets.pypi_password }}
+
