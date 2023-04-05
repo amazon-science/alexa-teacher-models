@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 import numpy as np
 from alexa_teacher_models.scripts.train_utils import load_data, create_tokenizer, Preprocessor, setup_logging
-from metrics import get_metric
+from alexa_teacher_models.scripts.metrics import get_metric
 
 # This allows us to us Auto* from HuggingFace to get to the model
 import alexa_teacher_models
@@ -43,7 +43,7 @@ if "WANDB_DISABLED" not in os.environ:
 
 # It is possible to run bfloat16 on V100s, but the HF Seq2SeqTrainingArguments won't allow it
 if not is_torch_bf16_gpu_available():
-    from train_utils import VoltaBFloat16Seq2SeqTrainingArguments as Seq2SeqTrainingArguments
+    from alexa_teacher_models.scripts.train_utils import VoltaBFloat16Seq2SeqTrainingArguments as Seq2SeqTrainingArguments
 else:
     from transformers import Seq2SeqTrainingArguments
 
