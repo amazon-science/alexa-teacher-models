@@ -89,9 +89,8 @@ any AlexaTM model, and has a flexible set of command line arguments, including s
 
 ```
 $ pip install alexa_teacher_models[repl]
-$ python repl.py --model /path/to/AlexaTM-20B-pr/ --max_length 64
-$ python repl.py --model /path/to/AlexaTM-20B-pr/ --max_length 64 --do_sample --max_history 3 --join_string " </s> "
-
+$ python -m alexa_teacher_models.scripts.repl --model /path/to/AlexaTM-20B-pr/ --max_length 64
+$ python -m alexa_teacher_models.scripts.repl --model /path/to/AlexaTM-20B-pr/ --max_length 64 --do_sample --max_history 3 --join_string " </s> "
 
 ```
 
