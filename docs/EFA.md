@@ -170,7 +170,7 @@ After you have prepared your compute instances and datasets, training should wor
 
 
 ```
-deepspeed --hostfile /path/to/hostfile finetune.py \
+deepspeed --hostfile /path/to/hostfile --module alexa_teacher_models.scripts.finetune \
     --source_prefix "[CLM] " \
     --per_device_train_batch_size 1 \
     --deepspeed deepspeed/zero3.json \
@@ -185,7 +185,6 @@ deepspeed --hostfile /path/to/hostfile finetune.py \
     --num_train_epochs 1 --save_steps 100
 ```
 
-
 Once the model has run for a bit, you will be able to see performance numbers, and `tensorboard` (if enabled, see below for setup details) will start logging
 
 ## Preprocessing the data upfront
@@ -197,7 +196,7 @@ To run preprocessing upfront, execute the `preproc.py` script:
 
 ```
 
-python preproc.py --model_name_or_path /path/to/AlexaTM-20b-pr/ \
+python -m alexa_teacher_models.scripts.preproc --model_name_or_path /path/to/AlexaTM-20b-pr/ \
     --max_length 512 \
     --max_target_length 64 \
     --source_prefix "[CLM] " \

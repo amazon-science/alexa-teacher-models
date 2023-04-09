@@ -103,7 +103,7 @@ To run on a single P4 (8 GPUs), you will need to use CPU offload.  A deepspeed c
 Assuming you have a training and validation JSONL formatted file, a run would look like this:
 ```
 $ pip install alexa_teacher_models[ft]
-$ deepspeed --num_gpus 8 finetune.py --per_device_train_batch_size $BS \
+$ deepspeed --num_gpus 8 --module alexa_teacher_models.scripts.finetune --per_device_train_batch_size $BS \
     --deepspeed deepspeed/zero3-offload.json \
     --model_name_or_path /home/ubuntu/AlexaTM/ --max_length 512 --bf16 --output_dir output \
     --max_target_length 64 --do_train --learning_rate 1e-7 \
