@@ -115,7 +115,7 @@ source ~/.bashrc
 cd alexa-teacher-models/
 pip install -e .[ft]
 cd scripts
-aws s3 cp --recursive s3://alexa-teacher-models/AlexaTM/AlexaTM-20b-1_0/ AlexaTM-20b-1_0/
+aws s3 cp --recursive s3://<model-bucket> <model>
 aws s3 cp --recursive s3://<your-bucket>/<your-dataset> <your-dataset>
 ```
 If you wish to run `tensorboard`, open up a port in your SecurityGroup for incoming traffic, then `pip install tensorboard` prior to running the fine-tuning code.
